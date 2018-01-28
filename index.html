@@ -4,19 +4,28 @@
 <head>
   <meta charset="utf-8">
   <title>Socket.io Test</title>
-  <script src="blah.js"></script>
   <script src="jquery/dist/jquery.js"></script>
 </head>
 
 <body>
 
   <h1>Hello World!</h1>
+  <div id="name"></div>
+  <form id="name_form">
+    <input id="name_input" type="text">
+    <input type="submit" value="Input Name">
+  </form>
+
   <div id="future"></div>
   <form id="chat_form">
     <input id="chat_input" type="text">
     <input type="submit" value="Send">
   </form>
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="socket.io/socket.io.js"></script>
+
+  <script>
+    $('#chat_form').hide()
+  </script>
 
   <script>
     var socket = io.connect('http://localhost:4200')
@@ -33,10 +42,19 @@
       $('#future').append(data + "<br/>")
     })
 
-    $('form').submit(function(e) {
+    $('#chat_form').submit(function(e) {
       e.preventDefault()
-      var message = $('#chat_input').val()
+      var message = `${$('#name_input').val()} says: "${$('#chat_input').val()}"`
       socket.emit('messages', message)
+    })
+  </script>
+
+  <script>
+    $('#name_form').submit(function(e) {
+      e.preventDefault()
+      $('#name').append($('#name_input').val() + "<br/>")
+      $('#name_form').hide()
+      $('#chat_form').show()
     })
   </script>
 
